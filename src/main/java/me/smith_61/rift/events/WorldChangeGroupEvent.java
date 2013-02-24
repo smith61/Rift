@@ -6,6 +6,13 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @author Jacob
+ * 
+ * This event is fired whenever a world has been moved
+ * 	between WorldGroups.
+ * 
+ */
 public class WorldChangeGroupEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();

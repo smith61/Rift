@@ -6,6 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * @author Jacob
+ * 
+ * This Event is fired whenever a player changes
+ * 	between two WorldGroups.
+ * 
+ * On Player login the from group will be null
+ * 	and on player logout the to group will be null
+ */
 public class PlayerChangeGroupEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();

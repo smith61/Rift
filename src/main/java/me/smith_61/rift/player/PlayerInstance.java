@@ -5,10 +5,31 @@ import me.smith_61.rift.worldgroup.WorldGroup;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.PlayerInventory;
 
+/**
+ * @author Jacob
+ *
+ * Represents an instance of a player for a specific
+ *  WorldGroup. The player does not have to be online
+ *  in order to be modified. Other plugins do not need
+ *  to worry about a player changing groups or logging
+ *  on while an isntance is being modified. It will be
+ *  seemlessly handled by the plugin.
+ */
 public interface PlayerInstance {
 
+	/**
+	 * Gets the player this instance is for. The player does
+	 * 	not have to be online.
+	 * 
+	 * @return The player this instance is for
+	 */
 	public abstract OfflinePlayer getPlayer();
 	
+	/**
+	 * Gets the WorldGroup this instance is for.
+	 * 
+	 * @return The WorldGroup this instance is for
+	 */
 	public abstract WorldGroup getGroup();
 	
 	public abstract PlayerInventory getInventory();
