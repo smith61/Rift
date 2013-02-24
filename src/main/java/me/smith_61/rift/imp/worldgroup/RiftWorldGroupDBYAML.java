@@ -63,6 +63,8 @@ public class RiftWorldGroupDBYAML implements RiftWorldGroupDB {
 						usedWorlds.add(world);
 					}
 				}
+				
+				group.setStorage(section);
 			}
 		}
 	}

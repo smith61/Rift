@@ -1,6 +1,8 @@
 package me.smith_61.rift.worldgroup;
 
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 
 /**
  * @author Jacob
@@ -56,6 +58,12 @@ public interface WorldGroup {
 	 */
 	public abstract boolean containsWorld(World world);
 	
-	
-	
+	/**
+	 * Gets the persistent storage of the plugin for this WorldGroup
+	 * 
+	 * @param plugin The plugin
+	 * 
+	 * @return The persistent storage of this plugin for this WorldGroup
+	 */
+	public abstract ConfigurationSection getPersistentStorage(Plugin plugin);
 }

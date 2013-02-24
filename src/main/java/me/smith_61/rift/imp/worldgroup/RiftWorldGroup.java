@@ -8,6 +8,8 @@ import me.smith_61.rift.worldgroup.WorldGroup;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 
 public class RiftWorldGroup implements WorldGroup {
 
@@ -16,6 +18,8 @@ public class RiftWorldGroup implements WorldGroup {
 	
 	private String name;
 	private List<World> worldsList;
+	
+	private ConfigurationSection persistentStorage;
 	
 	/*     Start Implementation Specific Methods     */
 	
@@ -34,6 +38,12 @@ public class RiftWorldGroup implements WorldGroup {
 			
 			//We still must fire an event about the world changing groups
 			Bukkit.getServer().getPluginManager().callEvent(new WorldChangeGroupEvent(world, this, null));
+		}
+	}
+	
+	protected void setStorage(ConfigurationSection section) {
+		if(this.persistentStorage == null) {
+			this.persistentStorage = section;
 		}
 	}
 	/*     End Implementation Specific Methods     */
@@ -72,6 +82,15 @@ public class RiftWorldGroup implements WorldGroup {
 
 	public boolean containsWorld(World world) {
 		return this.worldsList.contains(world);
+	}
+	
+	public ConfigurationSection getPersistentStorage(Plugin plugin) {
+		ConfigurationSection section = this.persistentStorage.getConfigurationSection(plugin.getName());
+		if(section == null) {
+			section = this.persistentStorage.createSection(plugin.getName());
+		}
+		
+		return section;
 	}
 
 	/*     End Interface Methods     */
