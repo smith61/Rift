@@ -6,7 +6,7 @@ public interface RiftWorldGroupDB {
 	
 	public abstract void close();
 	
-	public abstract RiftWorldGroup[] loadGroups();
+	public abstract void loadGroups(RiftWorldGroupManager manager);
 	
-	public abstract void saveGroups(RiftWorldGroup[] groups);
+	public abstract void saveGroups(RiftWorldGroupManager manager);
 }

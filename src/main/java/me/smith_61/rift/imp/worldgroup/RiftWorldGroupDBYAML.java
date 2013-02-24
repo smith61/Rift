@@ -21,15 +21,11 @@ public class RiftWorldGroupDBYAML implements RiftWorldGroupDB {
 	
 	private YamlConfiguration config;
 	
-	private RiftWorldGroupManager groupManager;
-	
 	/*     Start Implementation Specific Methods     */
 	
 	
-	protected RiftWorldGroupDBYAML(RiftPlugin plugin, RiftWorldGroupManager manager) {
+	protected RiftWorldGroupDBYAML(RiftPlugin plugin) {
 		this.yamlFile = new File(plugin.getDataFolder(), "WorldGroups.yml");
-		
-		this.groupManager = manager;
 	}
 	
 	
@@ -46,43 +42,33 @@ public class RiftWorldGroupDBYAML implements RiftWorldGroupDB {
 	public void close() {
 		try {
 			this.config.save(this.yamlFile);
-		} catch (IOException e) {
-			//Ignore
+		} catch (IOException ignore) {
 		}
 	}
 
-	public RiftWorldGroup[] loadGroups() {
+	public void loadGroups(RiftWorldGroupManager manager) {
 		Server server = Bukkit.getServer();
 		Set<World> usedWorlds = new HashSet<World>();
-		
-		List<RiftWorldGroup> groups = new ArrayList<RiftWorldGroup>();
 		
 		for(String key : this.config.getKeys(false)) {
 			if(this.config.isConfigurationSection(key)) {
 				ConfigurationSection section = this.config.getConfigurationSection(key);
 				
-				List<String> worldNames = section.getStringList("Worlds");
-				List<World> worlds = new ArrayList<World>();
+				RiftWorldGroup group = manager.createGroup(key);
 				
-				for(String worldName : worldNames) {
+				for(String worldName : section.getStringList("Worlds")) {
 					World world = server.getWorld(worldName);
 					if(world != null && !usedWorlds.contains(world)) {
-						worlds.add(world);
+						group.addWorld(world);
 						usedWorlds.add(world);
 					}
 				}
-				
-				RiftWorldGroup group = new RiftWorldGroup(this.groupManager, key, worlds.toArray(new World[worlds.size()]));
-				
-				groups.add(group);
 			}
 		}
-		
-		return groups.toArray(new RiftWorldGroup[groups.size()]);
 	}
 
-	public void saveGroups(RiftWorldGroup[] groups) {
-		for(RiftWorldGroup group : groups) {
+	public void saveGroups(RiftWorldGroupManager manager) {
+		for(RiftWorldGroup group : manager.getGroups()) {
 			ConfigurationSection section = this.config.createSection(group.getName());
 			
 			List<String> worldNames = new ArrayList<String>();

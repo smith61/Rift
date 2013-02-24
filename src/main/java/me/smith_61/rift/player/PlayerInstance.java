@@ -3,7 +3,6 @@ package me.smith_61.rift.player;
 import me.smith_61.rift.worldgroup.WorldGroup;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.inventory.PlayerInventory;
 
 /**
  * @author Jacob

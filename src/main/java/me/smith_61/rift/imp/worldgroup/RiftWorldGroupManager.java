@@ -37,7 +37,7 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 		String dbName = section.getString("Database", "yaml");
 		
 		if(dbName.equalsIgnoreCase("yaml")) {
-			this.worldGroupDB = new RiftWorldGroupDBYAML(this.pluginInstance, this);
+			this.worldGroupDB = new RiftWorldGroupDBYAML(this.pluginInstance);
 		}
 		else {
 			throw new RuntimeException("Bad WorldGroup DB Type: " + dbName);
@@ -45,11 +45,13 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 		
 		this.worldGroupDB.initialize();
 		
-		this.worldGroups = new ArrayList<RiftWorldGroup>(Arrays.asList(this.worldGroupDB.loadGroups()));
+		this.worldGroups = new ArrayList<RiftWorldGroup>();
+		this.worldGroupDB.loadGroups(this);
 		
 		//Ensure a default group exists
 		this.createGroup("Default");
 		
+		//Verify all worlds are in a group. If not add them to the default group.
 		for(World world : this.pluginInstance.getServer().getWorlds()) {
 			if(this.getGroup(world) == null) {
 				this.getDefaultGroup().addWorld(world);
@@ -58,7 +60,7 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 	}
 	
 	public void disable() {
-		this.worldGroupDB.saveGroups(this.worldGroups.toArray(new RiftWorldGroup[this.worldGroups.size()]));
+		this.worldGroupDB.saveGroups(this);
 		this.worldGroupDB.close();
 	}
 	
@@ -88,7 +90,7 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 			}
 		}
 		
-		
+		//The only time it should reach here is during initialization
 		return null;
 	}
 
