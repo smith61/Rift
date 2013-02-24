@@ -2,12 +2,12 @@ package me.smith_61.rift.imp.player;
 
 import java.lang.ref.WeakReference;
 
+import me.smith_61.rift.player.InstanceInventory;
 import me.smith_61.rift.player.PlayerInstance;
 import me.smith_61.rift.worldgroup.WorldGroup;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 
 public class RiftPlayerInstance implements PlayerInstance {
 
@@ -16,6 +16,8 @@ public class RiftPlayerInstance implements PlayerInstance {
 	
 	private OfflinePlayer player;
 	private WorldGroup group;
+	
+	private RiftInstanceInventory inventory;
 	
 	//Using a WeakReference allows the playerData to be reclaimed 
 	private WeakReference<RiftPlayerData> playerData;
@@ -28,9 +30,11 @@ public class RiftPlayerInstance implements PlayerInstance {
 		this.group = group;
 		
 		this.playerData = new WeakReference<RiftPlayerData>(manager.getPlayerData(player, group));
+		
+		this.inventory = new RiftInstanceInventory(this);
 	}
 	
-	private RiftPlayerData getPlayerData() {
+	protected RiftPlayerData getPlayerData() {
 		RiftPlayerData data = this.playerData.get();
 		if(data == null) {
 			data = this.manager.getPlayerData(this.player, this.group);
@@ -39,12 +43,13 @@ public class RiftPlayerInstance implements PlayerInstance {
 		return data;
 	}
 	
-	private Player getPlayerInstance() {
-		return this.player.getPlayer();
+	protected boolean isLoaded() {
+		Player player = this.getPlayerInstance();
+		return player != null && this.group.containsWorld(player.getWorld());
 	}
 	
-	private boolean isLoaded() {
-		return this.getPlayerInstance() != null;
+	protected Player getPlayerInstance() {
+		return this.player.getPlayer();
 	}
 	
 	@Override
@@ -78,11 +83,8 @@ public class RiftPlayerInstance implements PlayerInstance {
 		return this.group;
 	}
 
-	public PlayerInventory getInventory() {
-		if(this.isLoaded()) {
-			return this.getPlayerInstance().getInventory();
-		}
-		return null;
+	public InstanceInventory getInventory() {
+		return this.inventory;
 	}
 
 	public int getHealth() {

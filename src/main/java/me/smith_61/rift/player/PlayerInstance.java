@@ -32,7 +32,12 @@ public interface PlayerInstance {
 	 */
 	public abstract WorldGroup getGroup();
 	
-	public abstract PlayerInventory getInventory();
+	/**
+	 * Gets the inventory of this instance.
+	 * 
+	 * @return The inventory of this instance
+	 */
+	public abstract InstanceInventory getInventory();
 	
 	
 	// Getters

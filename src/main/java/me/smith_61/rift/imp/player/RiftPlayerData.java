@@ -1,5 +1,9 @@
 package me.smith_61.rift.imp.player;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
+
 public class RiftPlayerData {
 
 	private RiftPlayerManager instance;
@@ -9,6 +13,8 @@ public class RiftPlayerData {
 	private int xp;
 	private int foodLevel;
 	private float saturation;
+	
+	private ItemStack[] playerInventory = new ItemStack[InventoryType.PLAYER.getDefaultSize()];
 	
 	
 	public int getHealth() {
@@ -49,6 +55,16 @@ public class RiftPlayerData {
 		this.markDirty(true);
 		
 		this.saturation = saturation;
+	}
+	
+	public ItemStack getItem(int slot) {
+		return this.playerInventory[slot];
+	}
+	
+	public void setItem(int slot, ItemStack stack) {
+		this.markDirty(true);
+		
+		this.playerInventory[slot] = stack;
 	}
 	
 
