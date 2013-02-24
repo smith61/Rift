@@ -1,6 +1,5 @@
 package me.smith_61.rift.imp.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 

@@ -12,6 +12,8 @@ import org.bukkit.event.HandlerList;
  * This event is fired whenever a world has been moved
  * 	between WorldGroups.
  * 
+ * On world load the from group will be null and on world 
+ * 	unload the to group will be null
  */
 public class WorldChangeGroupEvent extends Event {
 

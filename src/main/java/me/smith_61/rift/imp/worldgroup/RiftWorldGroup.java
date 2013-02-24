@@ -1,7 +1,6 @@
 package me.smith_61.rift.imp.worldgroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.smith_61.rift.events.WorldChangeGroupEvent;
@@ -20,22 +19,23 @@ public class RiftWorldGroup implements WorldGroup {
 	
 	/*     Start Implementation Specific Methods     */
 	
-	protected RiftWorldGroup(RiftWorldGroupManager manager, String name, World[] worlds) {
+	protected RiftWorldGroup(RiftWorldGroupManager manager, String name) {
 		this.groupManager = manager;
 		
 		this.name = name;
 		
 		this.worldsList = new ArrayList<World>();
-		if(worlds != null) {
-			this.worldsList.addAll(Arrays.asList(worlds));
+	}
+	
+	//Called from RiftWorldGroupManager when a world is unloaded
+	protected void removeWorld(World world) {
+		if(this.containsWorld(world)) {
+			this.worldsList.remove(world);
+			
+			//We still must fire an event about the world changing groups
+			Bukkit.getServer().getPluginManager().callEvent(new WorldChangeGroupEvent(world, this, null));
 		}
 	}
-	
-	protected RiftWorldGroup(RiftWorldGroupManager manager, String name) {
-		this(manager, name, null);
-	}
-	
-	
 	/*     End Implementation Specific Methods     */
 	
 	
@@ -60,8 +60,8 @@ public class RiftWorldGroup implements WorldGroup {
 		
 		if(oldGroup != null) {
 			oldGroup.worldsList.remove(world);
-			Bukkit.getServer().getPluginManager().callEvent(new WorldChangeGroupEvent(world, oldGroup, this));
 		}
+		Bukkit.getServer().getPluginManager().callEvent(new WorldChangeGroupEvent(world, oldGroup, this));
 	}
 
 	public void addWorlds(World[] worlds) {

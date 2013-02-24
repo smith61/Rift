@@ -1,7 +1,6 @@
 package me.smith_61.rift.imp.worldgroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.smith_61.rift.imp.RiftPlugin;
@@ -10,8 +9,13 @@ import me.smith_61.rift.worldgroup.WorldGroupManager;
 
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
-public class RiftWorldGroupManager implements WorldGroupManager {
+public class RiftWorldGroupManager implements WorldGroupManager, Listener {
 
 	private RiftPlugin pluginInstance;
 	
@@ -57,11 +61,23 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 				this.getDefaultGroup().addWorld(world);
 			}
 		}
+		
+		this.pluginInstance.getServer().getPluginManager().registerEvents(this, this.pluginInstance);
 	}
 	
 	public void disable() {
 		this.worldGroupDB.saveGroups(this);
 		this.worldGroupDB.close();
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onWorldLoad(WorldLoadEvent event) {
+		this.getDefaultGroup().addWorld(event.getWorld());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onWorldUnload(WorldUnloadEvent event) {
+		this.getGroup(event.getWorld()).removeWorld(event.getWorld());
 	}
 	
 	/*     End Implementation Specific Methods     */
@@ -99,17 +115,17 @@ public class RiftWorldGroupManager implements WorldGroupManager {
 	}
 
 	public RiftWorldGroup createGroup(String name) {
+		return this.createGroup(name, new World[0]);
+	}
+
+	public RiftWorldGroup createGroup(String name, World[] worlds) {
 		RiftWorldGroup group = this.getGroup(name);
 		if(group == null) {
 			group = new RiftWorldGroup(this, name);
 			this.worldGroups.add(group);
-		}
-		return group;
-	}
 
-	public RiftWorldGroup createGroup(String name, World[] worlds) {
-		RiftWorldGroup group = this.createGroup(name);
-		group.addWorlds(worlds);
+			group.addWorlds(worlds);
+		}
 		
 		return group;
 	}
