@@ -64,7 +64,11 @@ public class RiftWorldGroupDBYAML implements RiftWorldGroupDB {
 					}
 				}
 				
-				group.setStorage(section);
+				ConfigurationSection storage = section.getConfigurationSection("storage");
+				if(storage == null) {
+					storage = section.createSection("storage");
+				}
+				group.setStorage(storage);
 			}
 		}
 	}
@@ -80,6 +84,8 @@ public class RiftWorldGroupDBYAML implements RiftWorldGroupDB {
 			}
 			
 			section.set("Worlds", worldNames);
+			
+			section.set("storage", group.getStorage());
 		}
 	}
 

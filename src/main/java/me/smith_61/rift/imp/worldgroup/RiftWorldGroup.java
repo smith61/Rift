@@ -46,6 +46,11 @@ public class RiftWorldGroup implements WorldGroup {
 			this.persistentStorage = section;
 		}
 	}
+	
+	protected ConfigurationSection getStorage() {
+		return this.persistentStorage;
+	}
+	
 	/*     End Implementation Specific Methods     */
 	
 	

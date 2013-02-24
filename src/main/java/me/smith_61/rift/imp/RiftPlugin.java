@@ -15,7 +15,11 @@ public class RiftPlugin extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		this.playerManager.disable();
+		this.playerManager = null;
+		
 		this.groupManager.disable();
+		this.groupManager = null;
 	}
 
 	@Override
@@ -23,9 +27,10 @@ public class RiftPlugin extends JavaPlugin {
 		this.getDataFolder().mkdirs();
 		
 		this.groupManager = new RiftWorldGroupManager(this);
-		this.playerManager = new RiftPlayerManager(groupManager);
-		
 		this.groupManager.enable();
+		
+		this.playerManager = new RiftPlayerManager(this, groupManager);
+		this.playerManager.enable();
 		
 		for(World world : this.getServer().getWorlds()) {
 			System.out.println(String.format("World: %s is in WorldGroup: %s.", world.getName(), this.groupManager.getGroup(world).getName()));
