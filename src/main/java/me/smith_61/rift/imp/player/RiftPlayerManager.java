@@ -59,6 +59,7 @@ public class RiftPlayerManager implements PlayerManager {
 			
 			public void run() {
 				RiftPlayerManager.this.flush();
+				RiftPlayerManager.this.plugin.getLogger().log(Level.INFO, "AutoSaving players.");
 			}
 		}, 0L, section.getLong("AutoSave", 5) * 60 * 20);
 		

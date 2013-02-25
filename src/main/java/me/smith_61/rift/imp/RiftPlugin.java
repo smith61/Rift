@@ -6,7 +6,6 @@ import me.smith_61.rift.imp.commands.RiftCommandManager;
 import me.smith_61.rift.imp.player.RiftPlayerManager;
 import me.smith_61.rift.imp.worldgroup.RiftWorldGroupManager;
 
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,28 +40,26 @@ public class RiftPlugin extends JavaPlugin {
 		this.getDataFolder().mkdirs();
 		createDefaultConfig();
 		
-		if(this.getConfig().getBoolean("Debug")) {
-			this.getLogger().setLevel(Level.ALL);
-		}
-		else {
-			this.getLogger().setLevel(Level.WARNING);
-		}
+		this.setDebugging(this.getConfig().getBoolean("Debug"));
 		
 		this.groupManager = new RiftWorldGroupManager(this);
 		this.groupManager.enable();
 		
 		this.playerManager = new RiftPlayerManager(this, groupManager);
 		this.playerManager.enable();
+		
+		RiftCommandManager.registerCommands(this);
 	}
 	
 	public void setDebugging(boolean debug) {
 		if(debug) {
 			this.getLogger().setLevel(Level.ALL);
-			this.getLogger().log(Level.INFO, "Debugging enabled.");
 		}
 		else {
 			this.getLogger().setLevel(Level.WARNING);
 		}
+		
+		this.getConfig().set("Debug", debug);
 	}
 	
 	private void createDefaultConfig() {
