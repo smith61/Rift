@@ -2,6 +2,7 @@ package me.smith_61.rift.imp.worldgroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import me.smith_61.rift.imp.RiftPlugin;
 import me.smith_61.rift.worldgroup.WorldGroup;
@@ -39,7 +40,7 @@ public class RiftWorldGroupManager implements WorldGroupManager, Listener {
 		}
 		
 		String dbName = section.getString("Database", "yaml");
-		
+		this.pluginInstance.getLogger().log(Level.INFO, String.format("WorldGroup DBType: %s", dbName));
 		if(dbName.equalsIgnoreCase("yaml")) {
 			this.worldGroupDB = new RiftWorldGroupDBYAML(this.pluginInstance);
 		}
@@ -63,6 +64,10 @@ public class RiftWorldGroupManager implements WorldGroupManager, Listener {
 		}
 		
 		this.pluginInstance.getServer().getPluginManager().registerEvents(this, this.pluginInstance);
+		
+		for(World world : this.pluginInstance.getServer().getWorlds()) {
+			this.pluginInstance.getLogger().log(Level.INFO, String.format("World: %s is in WorldGroup: %s.", world.getName(), this.getGroup(world).getName()));
+		}
 	}
 	
 	public void disable() {

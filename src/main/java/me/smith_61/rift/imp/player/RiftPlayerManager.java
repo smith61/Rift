@@ -45,6 +45,7 @@ public class RiftPlayerManager implements PlayerManager {
 		}
 		
 		String dbType = section.getString("Database", "yaml");
+		this.plugin.getLogger().log(Level.INFO, String.format("Player DBType: %s", dbType));
 		if(dbType.equals("yaml")) {
 			this.database = new RiftPlayerDataDBYAML(plugin);
 		}
@@ -64,7 +65,7 @@ public class RiftPlayerManager implements PlayerManager {
 		RiftPlayerListener listener = new RiftPlayerListener(this.plugin, this, this.groupManager);
 		this.plugin.getServer().getPluginManager().registerEvents(listener, this.plugin);
 		
-		//We need to add any players that are currently on the server. As the plugin may while the server is running
+		//We need to add any players that are currently on the server. As the plugin may be started while the server is running
 		for(World world : this.plugin.getServer().getWorlds()) {
 			for(Player player : world.getPlayers()) {
 				listener.handlePlayerChangeGroup(player, null, this.groupManager.getGroup(player.getWorld()));
@@ -89,6 +90,7 @@ public class RiftPlayerManager implements PlayerManager {
 	}
 	
 	protected void markDirty(RiftPlayerData data) {
+		this.plugin.getLogger().log(Level.INFO, String.format("PlayerData marked dirty for Player: %s in Group: %s", data.getPlayer().getName(), data.getGroup().getName()));
 		dirtyData.add(data);
 	}
 	

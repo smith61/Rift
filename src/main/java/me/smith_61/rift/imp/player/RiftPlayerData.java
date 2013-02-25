@@ -1,5 +1,8 @@
 package me.smith_61.rift.imp.player;
 
+import java.util.logging.Level;
+
+import me.smith_61.rift.imp.RiftPlugin;
 import me.smith_61.rift.worldgroup.WorldGroup;
 
 import org.bukkit.OfflinePlayer;
@@ -106,6 +109,10 @@ public class RiftPlayerData {
 	}
 	
 	public void copyTo(Player player) {
+		RiftPlugin.getPlugin().getLogger().log(Level.INFO, 
+				String.format("Copying PlayerData into Player: %s. Player : %s, Group: %s.", 
+						player.getName(), this.getPlayer().getName(), this.getGroup().getName()));
+		
 		player.setHealth(this.getHealth());
 		player.setFoodLevel(this.getFoodLevel());
 		player.setSaturation(this.getSaturation());
@@ -117,6 +124,10 @@ public class RiftPlayerData {
 	}
 	
 	public void copyFrom(Player player) {
+		RiftPlugin.getPlugin().getLogger().log(Level.INFO, 
+				String.format("Copying PlayerData from Player: %s. Player : %s, Group: %s.", 
+						player.getName(), this.getPlayer().getName(), this.getGroup().getName()));
+		
 		this.setHealth(player.getHealth());
 		this.setFoodLevel(player.getFoodLevel());
 		this.setSaturation(player.getSaturation());
