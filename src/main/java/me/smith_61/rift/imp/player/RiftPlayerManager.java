@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import me.smith_61.rift.imp.ConfigValue;
 import me.smith_61.rift.imp.RiftPlugin;
 import me.smith_61.rift.player.PlayerManager;
 import me.smith_61.rift.worldgroup.WorldGroup;
@@ -14,7 +15,6 @@ import me.smith_61.rift.worldgroup.WorldGroupManager;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class RiftPlayerManager implements PlayerManager {
@@ -39,12 +39,8 @@ public class RiftPlayerManager implements PlayerManager {
 	}
 	
 	public void enable() {
-		ConfigurationSection section = this.plugin.getConfig().getConfigurationSection("Player");
-		if(section == null) {
-			section = this.plugin.getConfig().createSection("Player");
-		}
 		
-		String dbType = section.getString("Database", "yaml");
+		String dbType = ConfigValue.PLAYER_DB.getValue();
 		this.plugin.getLogger().log(Level.INFO, String.format("Player DBType: %s", dbType));
 		if(dbType.equals("yaml")) {
 			this.database = new RiftPlayerDataDBYAML(plugin);
@@ -61,7 +57,7 @@ public class RiftPlayerManager implements PlayerManager {
 				RiftPlayerManager.this.flush();
 				RiftPlayerManager.this.plugin.getLogger().log(Level.INFO, "AutoSaving players.");
 			}
-		}, 0L, section.getLong("AutoSave", 5) * 60 * 20);
+		}, 0L, ConfigValue.PLAYER_AUTOSAVE.getLong() * 60 * 20);
 		
 		RiftPlayerListener listener = new RiftPlayerListener(this.plugin, this, this.groupManager);
 		this.plugin.getServer().getPluginManager().registerEvents(listener, this.plugin);

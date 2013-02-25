@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import me.smith_61.rift.imp.ConfigValue;
 import me.smith_61.rift.imp.RiftPlugin;
 import me.smith_61.rift.worldgroup.WorldGroup;
 import me.smith_61.rift.worldgroup.WorldGroupManager;
 
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,12 +34,8 @@ public class RiftWorldGroupManager implements WorldGroupManager, Listener {
 	
 	
 	public void enable() {
-		ConfigurationSection section = this.pluginInstance.getConfig().getConfigurationSection("WorldGroup");
-		if(section == null) {
-			section = this.pluginInstance.getConfig().createSection("WorldGroup");
-		}
 		
-		String dbName = section.getString("Database", "yaml");
+		String dbName = ConfigValue.WORLDGROUP_DB.getValue();
 		this.pluginInstance.getLogger().log(Level.INFO, String.format("WorldGroup DBType: %s", dbName));
 		if(dbName.equalsIgnoreCase("yaml")) {
 			this.worldGroupDB = new RiftWorldGroupDBYAML(this.pluginInstance);

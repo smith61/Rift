@@ -6,8 +6,6 @@ import me.smith_61.rift.imp.commands.RiftCommandManager;
 import me.smith_61.rift.imp.player.RiftPlayerManager;
 import me.smith_61.rift.imp.worldgroup.RiftWorldGroupManager;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class RiftPlugin extends JavaPlugin {
@@ -38,9 +36,9 @@ public class RiftPlugin extends JavaPlugin {
 		instance = this;
 		
 		this.getDataFolder().mkdirs();
-		createDefaultConfig();
+		ConfigValue.loadConfig(this.getConfig());
 		
-		this.setDebugging(this.getConfig().getBoolean("Debug"));
+		this.setDebugging(ConfigValue.DEBUG.getBoolean());
 		
 		this.groupManager = new RiftWorldGroupManager(this);
 		this.groupManager.enable();
@@ -60,16 +58,5 @@ public class RiftPlugin extends JavaPlugin {
 		}
 		
 		this.getConfig().set("Debug", debug);
-	}
-	
-	private void createDefaultConfig() {
-		YamlConfiguration defaults = YamlConfiguration.loadConfiguration(this.getResource("defaults/Config.yml"));
-		FileConfiguration config = this.getConfig();
-		
-		for(String key : defaults.getKeys(true)) {
-			if(config.get(key) == null) {
-				config.set(key, defaults.get(key));
-			}
-		}
 	}
 }

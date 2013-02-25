@@ -1,6 +1,0 @@
-Debug: false
-Player:
-  Database: yaml
-  AutoSave: 5
-WorldGroup:
-  Database: yaml
