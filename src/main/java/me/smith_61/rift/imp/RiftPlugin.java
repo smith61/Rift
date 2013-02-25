@@ -49,6 +49,13 @@ public class RiftPlugin extends JavaPlugin {
 		RiftCommandManager.registerCommands(this);
 	}
 	
+	@Override
+	public void saveConfig() {
+		ConfigValue.saveConfig(this.getConfig());
+		
+		super.saveConfig();
+	}
+	
 	public void setDebugging(boolean debug) {
 		if(debug) {
 			this.getLogger().setLevel(Level.ALL);
@@ -56,7 +63,6 @@ public class RiftPlugin extends JavaPlugin {
 		else {
 			this.getLogger().setLevel(Level.WARNING);
 		}
-		
-		this.getConfig().set("Debug", debug);
+		ConfigValue.DEBUG.setValue(debug);
 	}
 }

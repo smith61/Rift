@@ -28,6 +28,12 @@ public final class ConfigValue<T> {
 		}
 	}
 	
+	protected static void saveConfig(Configuration config) {
+		for(Entry<String, ConfigValue<?>> entry : values.entrySet()) {
+			config.set(entry.getKey(), entry.getValue().getValue());
+		}
+	}
+	
 	private String node;
 	private Object value;
 	
