@@ -1,5 +1,7 @@
 package me.smith_61.rift.imp;
 
+import java.io.File;
+import java.net.URLClassLoader;
 import java.util.logging.Level;
 
 import me.smith_61.rift.imp.commands.RiftCommandManager;
@@ -7,6 +9,8 @@ import me.smith_61.rift.imp.player.RiftPlayerManager;
 import me.smith_61.rift.imp.worldgroup.RiftWorldGroupManager;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+import org.bukkit.plugin.java.PluginClassLoader;
 
 public class RiftPlugin extends JavaPlugin {
 
@@ -47,6 +51,10 @@ public class RiftPlugin extends JavaPlugin {
 		this.playerManager.enable();
 		
 		RiftCommandManager.registerCommands(this);
+		
+		if(ConfigValue.DEBUG.getBoolean()) {
+			runIntegrationTests();
+		}
 	}
 	
 	@Override
@@ -64,5 +72,24 @@ public class RiftPlugin extends JavaPlugin {
 			this.getLogger().setLevel(Level.WARNING);
 		}
 		ConfigValue.DEBUG.setValue(debug);
+	}
+	
+	//This is used in conjunction with Rift-Test to run jUnit tests in a bukkit environment
+	private void runIntegrationTests() {
+		try {
+			File integrationFile = new File(this.getDataFolder(), "Rift-Test.jar");
+			if(!integrationFile.exists() || integrationFile.isDirectory()) {
+				return;
+			}
+			else {
+				((PluginClassLoader)this.getClass().getClassLoader()).addURL(integrationFile.toURI().toURL());
+			}
+			Class<?> integrationTest = Class.forName("me.smith_61.rift.imp.RiftTest");
+			
+			Runnable runnable = (Runnable)integrationTest.getConstructor(RiftPlugin.class, File.class).newInstance(this, integrationFile);
+			
+			runnable.run();
+		}
+		catch(Throwable ignore) {}
 	}
 }
