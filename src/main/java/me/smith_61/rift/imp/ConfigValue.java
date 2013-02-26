@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.Configuration;
 
 public final class ConfigValue<T> {
+	
+	private static Map<String, ConfigValue<?>> values = new HashMap<String, ConfigValue<?>>();
 
 	public static final ConfigValue<Boolean> DEBUG = new ConfigValue<Boolean>("Debug", false);
 	
@@ -14,8 +16,6 @@ public final class ConfigValue<T> {
 	
 	public static final ConfigValue<String> PLAYER_DB = new ConfigValue<String>("Player.Database", "yaml");
 	public static final ConfigValue<Long> PLAYER_AUTOSAVE = new ConfigValue<Long>("Player.AutoSave", 5L);
-	
-	private static Map<String, ConfigValue<?>> values = new HashMap<String, ConfigValue<?>>();
 	
 	protected static void loadConfig(Configuration config) {
 		for(Entry<String, ConfigValue<?>> entry : values.entrySet()) {
@@ -61,8 +61,8 @@ public final class ConfigValue<T> {
 	}
 	
 	public int getInt() {
-		if(this.value instanceof Integer) {
-			return ((Integer)this.value).intValue();
+		if(this.value instanceof Number) {
+			return ((Number)this.value).intValue();
 		}
 		else {
 			return 0;
@@ -70,8 +70,8 @@ public final class ConfigValue<T> {
 	}
 	
 	public double getDouble() {
-		if(this.value instanceof Double) {
-			return ((Double)this.value).doubleValue();
+		if(this.value instanceof Number) {
+			return ((Number)this.value).doubleValue();
 		}
 		else {
 			return 0.0d;
@@ -79,8 +79,8 @@ public final class ConfigValue<T> {
 	}
 	
 	public long getLong() {
-		if(this.value instanceof Long) {
-			return ((Long)this.value).longValue();
+		if(this.value instanceof Number) {
+			return ((Number)this.value).longValue();
 		}
 		else {
 			return 0l;
